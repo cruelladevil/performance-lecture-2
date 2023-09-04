@@ -1,4 +1,4 @@
-import React, { Suspense, useState } from 'react'
+import React, { Suspense, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import Header from './components/Header'
 import InfoTable from './components/InfoTable'
@@ -16,15 +16,15 @@ const LazyImageModal = lazyWithPreload(() => import('./components/ImageModal'));
 function App() {
     const [showModal, setShowModal] = useState(false)
 
-    const dynamicImportImageModal = () => {
+    useEffect(()=> {
         LazyImageModal.preload();
-    }
+    }, []);
 
     return (
         <div className="App">
             <Header />
             <InfoTable />
-            <ButtonModal onClick={() => { setShowModal(true) }} onMouseEnter={dynamicImportImageModal}>올림픽 사진 보기</ButtonModal>
+            <ButtonModal onClick={() => { setShowModal(true) }}>올림픽 사진 보기</ButtonModal>
             <SurveyChart />
             <Footer />
             <Suspense fallback={null}>
