@@ -5,16 +5,26 @@ import InfoTable from './components/InfoTable'
 import SurveyChart from './components/SurveyChart'
 import Footer from './components/Footer'
 
-const LazyImageModal = React.lazy(() => import('./components/ImageModal'));
+const lazyWithPreload = (factory) => {
+    const Component = React.lazy(factory);
+    Component.preload = factory;
+    return Component;
+}
+
+const LazyImageModal = lazyWithPreload(() => import('./components/ImageModal'));
 
 function App() {
     const [showModal, setShowModal] = useState(false)
+
+    const dynamicImportImageModal = () => {
+        LazyImageModal.preload();
+    }
 
     return (
         <div className="App">
             <Header />
             <InfoTable />
-            <ButtonModal onClick={() => { setShowModal(true) }}>올림픽 사진 보기</ButtonModal>
+            <ButtonModal onClick={() => { setShowModal(true) }} onMouseEnter={dynamicImportImageModal}>올림픽 사진 보기</ButtonModal>
             <SurveyChart />
             <Footer />
             <Suspense fallback={null}>
